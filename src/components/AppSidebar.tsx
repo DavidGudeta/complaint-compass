@@ -33,41 +33,92 @@ const roleNavItems: Record<UserRole, NavItem[]> = {
   director: [
     { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
     {
-      title: 'Complaint Settings', url: '#', icon: Settings,
+      title: 'Cases', url: '#', icon: ClipboardList,
       children: [
-        { title: 'Categories & Subcategories', url: '/dashboard/categories' },
-        { title: 'Case Status Settings', url: '/dashboard/statuses' },
+        { title: 'All Complaints', url: '/dashboard/complaints' },
+        { title: 'All Assessments', url: '/dashboard/assessments' },
+        { title: 'All Responses', url: '/dashboard/responses' },
       ]
     },
-    { title: 'All Complaints', url: '/dashboard/complaints', icon: ClipboardList },
-    { title: 'All Assessments', url: '/dashboard/assessments', icon: CheckCircle },
-    { title: 'All Responses', url: '/dashboard/responses', icon: MessageSquare },
     {
       title: 'Reports', url: '#', icon: BarChart3,
       children: [
-        { title: 'Complaints Report', url: '/dashboard/reports/complaints' },
-        { title: 'Assessment Report', url: '/dashboard/reports/assessments' },
-        { title: 'Response Report', url: '/dashboard/reports/responses' },
-        { title: 'Performance Report', url: '/dashboard/reports/performance' },
-        { title: 'Contact Survey', url: '/dashboard/reports/contacts' },
+        { title: 'Complaints Reports', url: '/dashboard/reports/complaints' },
+        { title: 'Assessment Reports', url: '/dashboard/reports/assessments' },
+        { title: 'Response Reports', url: '/dashboard/reports/responses' },
+        { title: 'Feedback Reports', url: '/dashboard/reports/feedback' },
+      ]
+    },
+    {
+      title: 'Settings', url: '#', icon: Settings,
+      children: [
+        { title: 'Category & Subcategory', url: '/dashboard/categories' },
+        { title: 'Complaint Status', url: '/dashboard/statuses' },
+      ]
+    },
+    {
+      title: 'Manage', url: '#', icon: FolderOpen,
+      children: [
+        { title: 'Re-opened Complaints', url: '/dashboard/reopened' },
       ]
     },
   ],
   team_leader: [
     { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
-    { title: 'All Complaints', url: '/dashboard/complaints', icon: ClipboardList },
-    { title: 'Assign Complaints', url: '/dashboard/assign', icon: UserCheck },
-    { title: 'All Assessments', url: '/dashboard/assessments', icon: CheckCircle },
-    { title: 'All Responses', url: '/dashboard/responses', icon: MessageSquare },
-    { title: 'Team KPIs', url: '/dashboard/kpis', icon: Target },
-    { title: 'Reports', url: '/dashboard/reports', icon: BarChart3 },
+    {
+      title: 'Cases', url: '#', icon: ClipboardList,
+      children: [
+        { title: 'All Complaints', url: '/dashboard/complaints' },
+        { title: 'All Assessments', url: '/dashboard/assessments' },
+        { title: 'All Responses', url: '/dashboard/responses' },
+        { title: 'All Approvals', url: '/dashboard/approvals' },
+      ]
+    },
+    {
+      title: 'Reports', url: '#', icon: BarChart3,
+      children: [
+        { title: 'Complaints Reports', url: '/dashboard/reports/complaints' },
+        { title: 'Assessment Reports', url: '/dashboard/reports/assessments' },
+        { title: 'Response Reports', url: '/dashboard/reports/responses' },
+        { title: 'Feedback Reports', url: '/dashboard/reports/feedback' },
+        { title: 'Performance Reports', url: '/dashboard/reports/performance' },
+      ]
+    },
+    {
+      title: 'Manage', url: '#', icon: UserCheck,
+      children: [
+        { title: 'Assign Complaints', url: '/dashboard/assign' },
+        { title: 'Unassigned Complaints', url: '/dashboard/unassigned' },
+        { title: 'Closed Complaints', url: '/dashboard/closed' },
+      ]
+    },
   ],
   officer: [
     { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
-    { title: 'My Complaints', url: '/dashboard/complaints', icon: ClipboardList },
-    { title: 'Assessments', url: '/dashboard/assessments', icon: CheckCircle },
-    { title: 'Responses', url: '/dashboard/responses', icon: MessageSquare },
-    { title: 'Documents', url: '/dashboard/documents', icon: FolderOpen },
+    {
+      title: 'Cases', url: '#', icon: ClipboardList,
+      children: [
+        { title: 'My Complaints', url: '/dashboard/complaints' },
+        { title: 'My Assessments', url: '/dashboard/assessments' },
+        { title: 'My Responses', url: '/dashboard/responses' },
+        { title: 'Approved Responses', url: '/dashboard/approved' },
+      ]
+    },
+    {
+      title: 'Reports', url: '#', icon: BarChart3,
+      children: [
+        { title: 'Performance Reports', url: '/dashboard/reports/performance' },
+        { title: 'Feedback Reports', url: '/dashboard/reports/feedback' },
+      ]
+    },
+    {
+      title: 'Manage', url: '#', icon: FolderOpen,
+      children: [
+        { title: 'Assign Complaints', url: '/dashboard/assign' },
+        { title: 'Unassigned Complaints', url: '/dashboard/unassigned' },
+        { title: 'Closed Complaints', url: '/dashboard/closed' },
+      ]
+    },
   ],
   directorate: [
     { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
