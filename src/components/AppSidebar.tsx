@@ -25,10 +25,9 @@ interface NavItem {
 const roleNavItems: Record<UserRole, NavItem[]> = {
   admin: [
     { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
-    { title: 'Manage Users', url: '/dashboard/users', icon: Users },
-    { title: 'Directorates', url: '/dashboard/directorates', icon: Building2 },
-    { title: 'Reports', url: '/dashboard/reports', icon: BarChart3 },
-    { title: 'Portal Settings', url: '/dashboard/settings', icon: Settings },
+    { title: 'Users', url: '/dashboard/users', icon: Users },
+    { title: 'Roles', url: '/dashboard/roles', icon: Shield },
+    { title: 'User Status', url: '/dashboard/user-status', icon: UserCheck },
   ],
   director: [
     { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
