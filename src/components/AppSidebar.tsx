@@ -155,7 +155,7 @@ export function AppSidebar() {
         </div>
         {!collapsed && (
           <div className="overflow-hidden">
-            <h2 className="text-sm font-bold text-sidebar-accent-foreground truncate">Complaints Portal</h2>
+            <h2 className="text-sm font-bold text-sidebar-accent-foreground truncate">MOR Complaints Portal</h2>
             <p className="text-[11px] text-sidebar-muted truncate">{roleLabelMap[user.role]}</p>
           </div>
         )}
