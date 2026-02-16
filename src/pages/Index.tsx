@@ -61,8 +61,8 @@ const Index = () => {
               <Shield className="w-5 h-5 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-base font-bold text-foreground leading-tight">Complaints Portal</h1>
-              <p className="text-[11px] text-muted-foreground">Government Services</p>
+              <h1 className="text-base font-bold text-foreground leading-tight">MOR Complaints Portal</h1>
+              <p className="text-[11px] text-muted-foreground">Ministry of Revenues</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -88,7 +88,7 @@ const Index = () => {
         </div>
         <div className="relative container mx-auto px-4 py-20 md:py-28 text-center">
           <h2 className="text-3xl md:text-5xl font-bold text-primary-foreground mb-4 leading-tight">
-            Your Voice Matters
+            Ethiopia Ministry of Revenues<br />Complaints Portal
           </h2>
           <p className="text-primary-foreground/80 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
             Submit and track your complaints with ease. We are committed to resolving your concerns promptly and transparently.
@@ -236,7 +236,7 @@ const Index = () => {
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-primary" />
-            <span>© 2026 Complaints Portal. All rights reserved.</span>
+            <span>© 2026 MOR Complaints Portal. All rights reserved.</span>
           </div>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> Addis Ababa, Ethiopia</span>
