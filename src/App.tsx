@@ -12,7 +12,22 @@ import ComplaintsList from "./pages/dashboard/ComplaintsList";
 import AssessmentsList from "./pages/dashboard/AssessmentsList";
 import ResponsesList from "./pages/dashboard/ResponsesList";
 import ReportsPage from "./pages/dashboard/ReportsPage";
-import PlaceholderPage from "./pages/dashboard/PlaceholderPage";
+import UsersPage from "./pages/dashboard/UsersPage";
+import RolesPage from "./pages/dashboard/RolesPage";
+import UserStatusPage from "./pages/dashboard/UserStatusPage";
+import CategoriesPage from "./pages/dashboard/CategoriesPage";
+import StatusesPage from "./pages/dashboard/StatusesPage";
+import AssignComplaintsPage from "./pages/dashboard/AssignComplaintsPage";
+import UnassignedComplaintsPage from "./pages/dashboard/UnassignedComplaintsPage";
+import ClosedComplaintsPage from "./pages/dashboard/ClosedComplaintsPage";
+import ReopenedComplaintsPage from "./pages/dashboard/ReopenedComplaintsPage";
+import ApprovalsPage from "./pages/dashboard/ApprovalsPage";
+import ApprovedResponsesPage from "./pages/dashboard/ApprovedResponsesPage";
+import ComplaintsReportPage from "./pages/dashboard/reports/ComplaintsReportPage";
+import AssessmentReportPage from "./pages/dashboard/reports/AssessmentReportPage";
+import ResponseReportPage from "./pages/dashboard/reports/ResponseReportPage";
+import FeedbackReportPage from "./pages/dashboard/reports/FeedbackReportPage";
+import PerformanceReportPage from "./pages/dashboard/reports/PerformanceReportPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,18 +48,22 @@ const App = () => (
               <Route path="assessments" element={<AssessmentsList />} />
               <Route path="responses" element={<ResponsesList />} />
               <Route path="reports" element={<ReportsPage />} />
-              <Route path="reports/:type" element={<PlaceholderPage />} />
-              <Route path="users" element={<PlaceholderPage />} />
-              <Route path="roles" element={<PlaceholderPage />} />
-              <Route path="user-status" element={<PlaceholderPage />} />
-              <Route path="categories" element={<PlaceholderPage />} />
-              <Route path="statuses" element={<PlaceholderPage />} />
-              <Route path="assign" element={<PlaceholderPage />} />
-              <Route path="unassigned" element={<PlaceholderPage />} />
-              <Route path="closed" element={<PlaceholderPage />} />
-              <Route path="reopened" element={<PlaceholderPage />} />
-              <Route path="approvals" element={<PlaceholderPage />} />
-              <Route path="approved" element={<PlaceholderPage />} />
+              <Route path="reports/complaints" element={<ComplaintsReportPage />} />
+              <Route path="reports/assessments" element={<AssessmentReportPage />} />
+              <Route path="reports/responses" element={<ResponseReportPage />} />
+              <Route path="reports/feedback" element={<FeedbackReportPage />} />
+              <Route path="reports/performance" element={<PerformanceReportPage />} />
+              <Route path="users" element={<UsersPage />} />
+              <Route path="roles" element={<RolesPage />} />
+              <Route path="user-status" element={<UserStatusPage />} />
+              <Route path="categories" element={<CategoriesPage />} />
+              <Route path="statuses" element={<StatusesPage />} />
+              <Route path="assign" element={<AssignComplaintsPage />} />
+              <Route path="unassigned" element={<UnassignedComplaintsPage />} />
+              <Route path="closed" element={<ClosedComplaintsPage />} />
+              <Route path="reopened" element={<ReopenedComplaintsPage />} />
+              <Route path="approvals" element={<ApprovalsPage />} />
+              <Route path="approved" element={<ApprovedResponsesPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
