@@ -35,13 +35,16 @@ const App = () => (
               <Route path="reports" element={<ReportsPage />} />
               <Route path="reports/:type" element={<PlaceholderPage />} />
               <Route path="users" element={<PlaceholderPage />} />
-              <Route path="directorates" element={<PlaceholderPage />} />
-              <Route path="settings" element={<PlaceholderPage />} />
+              <Route path="roles" element={<PlaceholderPage />} />
+              <Route path="user-status" element={<PlaceholderPage />} />
               <Route path="categories" element={<PlaceholderPage />} />
               <Route path="statuses" element={<PlaceholderPage />} />
               <Route path="assign" element={<PlaceholderPage />} />
-              <Route path="kpis" element={<PlaceholderPage />} />
-              <Route path="documents" element={<PlaceholderPage />} />
+              <Route path="unassigned" element={<PlaceholderPage />} />
+              <Route path="closed" element={<PlaceholderPage />} />
+              <Route path="reopened" element={<PlaceholderPage />} />
+              <Route path="approvals" element={<PlaceholderPage />} />
+              <Route path="approved" element={<PlaceholderPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
