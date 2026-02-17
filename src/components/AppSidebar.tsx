@@ -1,6 +1,8 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { UserRole } from '@/lib/types';
+import { TranslationKey } from '@/lib/translations';
 import {
   LayoutDashboard, FileText, Users, Settings, BarChart3,
   ClipboardList, CheckCircle, MessageSquare, FolderOpen,
@@ -16,119 +18,120 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { cn } from '@/lib/utils';
 
 interface NavItem {
-  title: string;
+  titleKey: TranslationKey;
   url: string;
   icon: React.ComponentType<{ className?: string }>;
-  children?: { title: string; url: string }[];
+  children?: { titleKey: TranslationKey; url: string }[];
 }
 
 const roleNavItems: Record<UserRole, NavItem[]> = {
   admin: [
-    { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
-    { title: 'Users', url: '/dashboard/users', icon: Users },
-    { title: 'Roles', url: '/dashboard/roles', icon: Shield },
-    { title: 'User Status', url: '/dashboard/user-status', icon: UserCheck },
+    { titleKey: 'nav.dashboard', url: '/dashboard', icon: LayoutDashboard },
+    { titleKey: 'nav.users', url: '/dashboard/users', icon: Users },
+    { titleKey: 'nav.roles', url: '/dashboard/roles', icon: Shield },
+    { titleKey: 'nav.userStatus', url: '/dashboard/user-status', icon: UserCheck },
   ],
   director: [
-    { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
+    { titleKey: 'nav.dashboard', url: '/dashboard', icon: LayoutDashboard },
     {
-      title: 'Cases', url: '#', icon: ClipboardList,
+      titleKey: 'nav.cases', url: '#', icon: ClipboardList,
       children: [
-        { title: 'All Complaints', url: '/dashboard/complaints' },
-        { title: 'All Assessments', url: '/dashboard/assessments' },
-        { title: 'All Responses', url: '/dashboard/responses' },
+        { titleKey: 'nav.allComplaints', url: '/dashboard/complaints' },
+        { titleKey: 'nav.allAssessments', url: '/dashboard/assessments' },
+        { titleKey: 'nav.allResponses', url: '/dashboard/responses' },
       ]
     },
     {
-      title: 'Reports', url: '#', icon: BarChart3,
+      titleKey: 'nav.reports', url: '#', icon: BarChart3,
       children: [
-        { title: 'Complaints Reports', url: '/dashboard/reports/complaints' },
-        { title: 'Assessment Reports', url: '/dashboard/reports/assessments' },
-        { title: 'Response Reports', url: '/dashboard/reports/responses' },
-        { title: 'Feedback Reports', url: '/dashboard/reports/feedback' },
+        { titleKey: 'nav.complaintsReports', url: '/dashboard/reports/complaints' },
+        { titleKey: 'nav.assessmentReports', url: '/dashboard/reports/assessments' },
+        { titleKey: 'nav.responseReports', url: '/dashboard/reports/responses' },
+        { titleKey: 'nav.feedbackReports', url: '/dashboard/reports/feedback' },
       ]
     },
     {
-      title: 'Settings', url: '#', icon: Settings,
+      titleKey: 'nav.settings', url: '#', icon: Settings,
       children: [
-        { title: 'Category & Subcategory', url: '/dashboard/categories' },
-        { title: 'Complaint Status', url: '/dashboard/statuses' },
+        { titleKey: 'nav.categorySubcategory', url: '/dashboard/categories' },
+        { titleKey: 'nav.complaintStatus', url: '/dashboard/statuses' },
       ]
     },
     {
-      title: 'Manage', url: '#', icon: FolderOpen,
+      titleKey: 'nav.manage', url: '#', icon: FolderOpen,
       children: [
-        { title: 'Re-opened Complaints', url: '/dashboard/reopened' },
+        { titleKey: 'nav.reopenedComplaints', url: '/dashboard/reopened' },
       ]
     },
   ],
   team_leader: [
-    { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
+    { titleKey: 'nav.dashboard', url: '/dashboard', icon: LayoutDashboard },
     {
-      title: 'Cases', url: '#', icon: ClipboardList,
+      titleKey: 'nav.cases', url: '#', icon: ClipboardList,
       children: [
-        { title: 'All Complaints', url: '/dashboard/complaints' },
-        { title: 'All Assessments', url: '/dashboard/assessments' },
-        { title: 'All Responses', url: '/dashboard/responses' },
-        { title: 'All Approvals', url: '/dashboard/approvals' },
+        { titleKey: 'nav.allComplaints', url: '/dashboard/complaints' },
+        { titleKey: 'nav.allAssessments', url: '/dashboard/assessments' },
+        { titleKey: 'nav.allResponses', url: '/dashboard/responses' },
+        { titleKey: 'nav.allApprovals', url: '/dashboard/approvals' },
       ]
     },
     {
-      title: 'Reports', url: '#', icon: BarChart3,
+      titleKey: 'nav.reports', url: '#', icon: BarChart3,
       children: [
-        { title: 'Complaints Reports', url: '/dashboard/reports/complaints' },
-        { title: 'Assessment Reports', url: '/dashboard/reports/assessments' },
-        { title: 'Response Reports', url: '/dashboard/reports/responses' },
-        { title: 'Feedback Reports', url: '/dashboard/reports/feedback' },
-        { title: 'Performance Reports', url: '/dashboard/reports/performance' },
+        { titleKey: 'nav.complaintsReports', url: '/dashboard/reports/complaints' },
+        { titleKey: 'nav.assessmentReports', url: '/dashboard/reports/assessments' },
+        { titleKey: 'nav.responseReports', url: '/dashboard/reports/responses' },
+        { titleKey: 'nav.feedbackReports', url: '/dashboard/reports/feedback' },
+        { titleKey: 'nav.performanceReports', url: '/dashboard/reports/performance' },
       ]
     },
     {
-      title: 'Manage', url: '#', icon: UserCheck,
+      titleKey: 'nav.manage', url: '#', icon: UserCheck,
       children: [
-        { title: 'Assign Complaints', url: '/dashboard/assign' },
-        { title: 'Unassigned Complaints', url: '/dashboard/unassigned' },
-        { title: 'Closed Complaints', url: '/dashboard/closed' },
+        { titleKey: 'nav.assignComplaints', url: '/dashboard/assign' },
+        { titleKey: 'nav.unassignedComplaints', url: '/dashboard/unassigned' },
+        { titleKey: 'nav.closedComplaints', url: '/dashboard/closed' },
       ]
     },
   ],
   officer: [
-    { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
+    { titleKey: 'nav.dashboard', url: '/dashboard', icon: LayoutDashboard },
     {
-      title: 'Cases', url: '#', icon: ClipboardList,
+      titleKey: 'nav.cases', url: '#', icon: ClipboardList,
       children: [
-        { title: 'My Complaints', url: '/dashboard/complaints' },
-        { title: 'My Assessments', url: '/dashboard/assessments' },
-        { title: 'My Responses', url: '/dashboard/responses' },
-        { title: 'Approved Responses', url: '/dashboard/approved' },
+        { titleKey: 'nav.myComplaints', url: '/dashboard/complaints' },
+        { titleKey: 'nav.myAssessments', url: '/dashboard/assessments' },
+        { titleKey: 'nav.myResponses', url: '/dashboard/responses' },
+        { titleKey: 'nav.approvedResponses', url: '/dashboard/approved' },
       ]
     },
     {
-      title: 'Reports', url: '#', icon: BarChart3,
+      titleKey: 'nav.reports', url: '#', icon: BarChart3,
       children: [
-        { title: 'Performance Reports', url: '/dashboard/reports/performance' },
-        { title: 'Feedback Reports', url: '/dashboard/reports/feedback' },
+        { titleKey: 'nav.performanceReports', url: '/dashboard/reports/performance' },
+        { titleKey: 'nav.feedbackReports', url: '/dashboard/reports/feedback' },
       ]
     },
     {
-      title: 'Manage', url: '#', icon: FolderOpen,
+      titleKey: 'nav.manage', url: '#', icon: FolderOpen,
       children: [
-        { title: 'Assign Complaints', url: '/dashboard/assign' },
-        { title: 'Unassigned Complaints', url: '/dashboard/unassigned' },
-        { title: 'Closed Complaints', url: '/dashboard/closed' },
+        { titleKey: 'nav.assignComplaints', url: '/dashboard/assign' },
+        { titleKey: 'nav.unassignedComplaints', url: '/dashboard/unassigned' },
+        { titleKey: 'nav.closedComplaints', url: '/dashboard/closed' },
       ]
     },
   ],
   directorate: [
-    { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
-    { title: 'Incoming Complaints', url: '/dashboard/complaints', icon: ClipboardList },
-    { title: 'Assessments', url: '/dashboard/assessments', icon: CheckCircle },
-    { title: 'Responses', url: '/dashboard/responses', icon: MessageSquare },
+    { titleKey: 'nav.dashboard', url: '/dashboard', icon: LayoutDashboard },
+    { titleKey: 'nav.incomingComplaints', url: '/dashboard/complaints', icon: ClipboardList },
+    { titleKey: 'nav.assessments', url: '/dashboard/assessments', icon: CheckCircle },
+    { titleKey: 'nav.responses', url: '/dashboard/responses', icon: MessageSquare },
   ],
 };
 
 export function AppSidebar() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const { state } = useSidebar();
   const location = useLocation();
   const collapsed = state === 'collapsed';
@@ -136,13 +139,7 @@ export function AppSidebar() {
   if (!user) return null;
   const items = roleNavItems[user.role] || [];
 
-  const roleLabelMap: Record<UserRole, string> = {
-    admin: 'Administrator',
-    director: 'Director',
-    team_leader: 'Team Leader',
-    officer: 'Officer',
-    directorate: 'Directorate',
-  };
+  const roleKey = `role.${user.role}` as TranslationKey;
 
   return (
     <Sidebar collapsible="icon" className="border-r-0">
@@ -155,23 +152,24 @@ export function AppSidebar() {
         </div>
         {!collapsed && (
           <div className="overflow-hidden">
-            <h2 className="text-sm font-bold text-sidebar-accent-foreground truncate">MOR Complaints Portal</h2>
-            <p className="text-[11px] text-sidebar-muted truncate">{roleLabelMap[user.role]}</p>
+            <h2 className="text-sm font-bold text-sidebar-accent-foreground truncate">{t('header.title')}</h2>
+            <p className="text-[11px] text-sidebar-muted truncate">{t(roleKey)}</p>
           </div>
         )}
       </div>
 
       <SidebarContent className="px-2 py-3">
         <SidebarGroup>
-          {!collapsed && <SidebarGroupLabel className="text-sidebar-muted text-[11px] uppercase tracking-wider mb-1">Navigation</SidebarGroupLabel>}
+          {!collapsed && <SidebarGroupLabel className="text-sidebar-muted text-[11px] uppercase tracking-wider mb-1">{t('nav.navigation')}</SidebarGroupLabel>}
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
+                const title = t(item.titleKey);
                 if (item.children) {
                   if (collapsed) {
                     return (
-                      <SidebarMenuItem key={item.title}>
-                        <SidebarMenuButton asChild tooltip={item.title}>
+                      <SidebarMenuItem key={item.titleKey}>
+                        <SidebarMenuButton asChild tooltip={title}>
                           <NavLink to={item.children[0].url} activeClassName="bg-sidebar-accent text-sidebar-primary">
                             <item.icon className="w-4 h-4" />
                           </NavLink>
@@ -180,13 +178,13 @@ export function AppSidebar() {
                     );
                   }
                   return (
-                    <Collapsible key={item.title} defaultOpen={item.children.some(c => location.pathname === c.url)}>
+                    <Collapsible key={item.titleKey} defaultOpen={item.children.some(c => location.pathname === c.url)}>
                       <SidebarMenuItem>
                         <CollapsibleTrigger asChild>
                           <SidebarMenuButton className="w-full justify-between hover:bg-sidebar-accent/50">
                             <span className="flex items-center gap-2">
                               <item.icon className="w-4 h-4" />
-                              <span>{item.title}</span>
+                              <span>{title}</span>
                             </span>
                             <ChevronDown className="w-3.5 h-3.5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
                           </SidebarMenuButton>
@@ -200,7 +198,7 @@ export function AppSidebar() {
                                   activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
                                   className="hover:bg-sidebar-accent/50"
                                 >
-                                  {child.title}
+                                  {t(child.titleKey)}
                                 </NavLink>
                               </SidebarMenuButton>
                             ))}
@@ -212,8 +210,8 @@ export function AppSidebar() {
                 }
 
                 return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild tooltip={item.title}>
+                  <SidebarMenuItem key={item.titleKey}>
+                    <SidebarMenuButton asChild tooltip={title}>
                       <NavLink
                         to={item.url}
                         end={item.url === '/dashboard'}
@@ -221,7 +219,7 @@ export function AppSidebar() {
                         className="hover:bg-sidebar-accent/50"
                       >
                         <item.icon className="w-4 h-4" />
-                        {!collapsed && <span>{item.title}</span>}
+                        {!collapsed && <span>{title}</span>}
                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

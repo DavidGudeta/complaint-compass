@@ -16,6 +16,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
 const typeIcon = (type: Notification['type']) => {
   switch (type) {
@@ -38,6 +40,7 @@ const timeAgo = (dateStr: string) => {
 export const DashboardHeader = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [notifications, setNotifications] = useState(mockNotifications);
   const [profileOpen, setProfileOpen] = useState(false);
   const [passwordOpen, setPasswordOpen] = useState(false);
@@ -63,20 +66,20 @@ export const DashboardHeader = () => {
   };
 
   const handleSaveProfile = () => {
-    toast.success('Profile updated successfully');
+    toast.success(t('dashboard.profileUpdated'));
     setProfileOpen(false);
   };
 
   const handleChangePassword = () => {
     if (newPassword !== confirmPassword) {
-      toast.error('Passwords do not match');
+      toast.error(t('dashboard.passwordMismatch'));
       return;
     }
     if (newPassword.length < 6) {
-      toast.error('Password must be at least 6 characters');
+      toast.error(t('dashboard.passwordTooShort'));
       return;
     }
-    toast.success('Password changed successfully');
+    toast.success(t('dashboard.passwordChanged'));
     setPasswordOpen(false);
     setCurrentPassword('');
     setNewPassword('');
@@ -87,10 +90,12 @@ export const DashboardHeader = () => {
     <header className="h-14 border-b border-border bg-card flex items-center justify-between px-4 sticky top-0 z-30">
       <div className="flex items-center gap-3">
         <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
-        <span className="text-sm font-medium text-muted-foreground hidden sm:block">Complaints Portal</span>
+        <span className="text-sm font-medium text-muted-foreground hidden sm:block">{t('dashboard.portal')}</span>
       </div>
 
       <div className="flex items-center gap-2">
+        <LanguageSwitcher variant="ghost" />
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-foreground">
@@ -104,16 +109,16 @@ export const DashboardHeader = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80 p-0 bg-popover z-50">
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-              <span className="text-sm font-semibold text-foreground">Notifications</span>
+              <span className="text-sm font-semibold text-foreground">{t('dashboard.notifications')}</span>
               {unreadCount > 0 && (
                 <button onClick={markAllRead} className="text-xs text-primary hover:underline">
-                  Mark all read
+                  {t('dashboard.markAllRead')}
                 </button>
               )}
             </div>
             <ScrollArea className="max-h-[360px]">
               {notifications.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-8">No notifications</p>
+                <p className="text-sm text-muted-foreground text-center py-8">{t('dashboard.noNotifications')}</p>
               ) : (
                 notifications.map(n => (
                   <div
@@ -158,71 +163,69 @@ export const DashboardHeader = () => {
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => setProfileOpen(true)}>
               <Pencil className="w-4 h-4 mr-2" />
-              Edit Profile
+              {t('dashboard.editProfile')}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setPasswordOpen(true)}>
               <Lock className="w-4 h-4 mr-2" />
-              Change Password
+              {t('dashboard.changePassword')}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout} className="text-destructive">
               <LogOut className="w-4 h-4 mr-2" />
-              Logout
+              {t('dashboard.logout')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
-      {/* Edit Profile Dialog */}
       <Dialog open={profileOpen} onOpenChange={setProfileOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Edit Profile</DialogTitle>
+            <DialogTitle>{t('dashboard.editProfile')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div className="space-y-2">
-              <Label htmlFor="profile-name">Full Name</Label>
+              <Label htmlFor="profile-name">{t('dashboard.fullName')}</Label>
               <Input id="profile-name" value={profileName} onChange={e => setProfileName(e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="profile-email">Email</Label>
+              <Label htmlFor="profile-email">{t('login.email')}</Label>
               <Input id="profile-email" type="email" value={profileEmail} onChange={e => setProfileEmail(e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label>Role</Label>
+              <Label>{t('dashboard.role')}</Label>
               <Input value={user?.role?.replace('_', ' ').toUpperCase() || ''} disabled className="opacity-60" />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setProfileOpen(false)}>Cancel</Button>
-            <Button onClick={handleSaveProfile}>Save Changes</Button>
+            <Button variant="outline" onClick={() => setProfileOpen(false)}>{t('common.cancel')}</Button>
+            <Button onClick={handleSaveProfile}>{t('dashboard.saveChanges')}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Change Password Dialog */}
       <Dialog open={passwordOpen} onOpenChange={setPasswordOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Change Password</DialogTitle>
+            <DialogTitle>{t('dashboard.changePassword')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div className="space-y-2">
-              <Label htmlFor="current-password">Current Password</Label>
+              <Label htmlFor="current-password">{t('dashboard.currentPassword')}</Label>
               <Input id="current-password" type="password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="new-password">New Password</Label>
+              <Label htmlFor="new-password">{t('dashboard.newPassword')}</Label>
               <Input id="new-password" type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm New Password</Label>
+              <Label htmlFor="confirm-password">{t('dashboard.confirmPassword')}</Label>
               <Input id="confirm-password" type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setPasswordOpen(false)}>Cancel</Button>
-            <Button onClick={handleChangePassword}>Update Password</Button>
+            <Button variant="outline" onClick={() => setPasswordOpen(false)}>{t('common.cancel')}</Button>
+            <Button onClick={handleChangePassword}>{t('dashboard.updatePassword')}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
