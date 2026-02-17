@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { Bell, LogOut, User, FileText, Users, Settings, AlertCircle } from 'lucide-react';
+import { Bell, LogOut, User, FileText, Users, Settings, AlertCircle, Pencil, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -10,6 +10,12 @@ import {
 import { mockNotifications, Notification } from '@/lib/notifications';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
 
 const typeIcon = (type: Notification['type']) => {
   switch (type) {
@@ -33,6 +39,13 @@ export const DashboardHeader = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState(mockNotifications);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [passwordOpen, setPasswordOpen] = useState(false);
+  const [profileName, setProfileName] = useState(user?.name || '');
+  const [profileEmail, setProfileEmail] = useState(user?.email || '');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
@@ -47,6 +60,27 @@ export const DashboardHeader = () => {
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  const handleSaveProfile = () => {
+    toast.success('Profile updated successfully');
+    setProfileOpen(false);
+  };
+
+  const handleChangePassword = () => {
+    if (newPassword !== confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
+    if (newPassword.length < 6) {
+      toast.error('Password must be at least 6 characters');
+      return;
+    }
+    toast.success('Password changed successfully');
+    setPasswordOpen(false);
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
   };
 
   return (
@@ -121,6 +155,16 @@ export const DashboardHeader = () => {
             <DropdownMenuItem className="text-muted-foreground">
               <span className="text-xs">{user?.email}</span>
             </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => setProfileOpen(true)}>
+              <Pencil className="w-4 h-4 mr-2" />
+              Edit Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setPasswordOpen(true)}>
+              <Lock className="w-4 h-4 mr-2" />
+              Change Password
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout} className="text-destructive">
               <LogOut className="w-4 h-4 mr-2" />
               Logout
@@ -128,6 +172,60 @@ export const DashboardHeader = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      {/* Edit Profile Dialog */}
+      <Dialog open={profileOpen} onOpenChange={setProfileOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Edit Profile</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label htmlFor="profile-name">Full Name</Label>
+              <Input id="profile-name" value={profileName} onChange={e => setProfileName(e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="profile-email">Email</Label>
+              <Input id="profile-email" type="email" value={profileEmail} onChange={e => setProfileEmail(e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label>Role</Label>
+              <Input value={user?.role?.replace('_', ' ').toUpperCase() || ''} disabled className="opacity-60" />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setProfileOpen(false)}>Cancel</Button>
+            <Button onClick={handleSaveProfile}>Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Change Password Dialog */}
+      <Dialog open={passwordOpen} onOpenChange={setPasswordOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Change Password</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label htmlFor="current-password">Current Password</Label>
+              <Input id="current-password" type="password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="new-password">New Password</Label>
+              <Input id="new-password" type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirm-password">Confirm New Password</Label>
+              <Input id="confirm-password" type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPasswordOpen(false)}>Cancel</Button>
+            <Button onClick={handleChangePassword}>Update Password</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </header>
   );
 };
