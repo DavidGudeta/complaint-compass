@@ -51,8 +51,8 @@ const DashboardHome = () => {
               {mockComplaints.slice(0, 5).map(c => (
                 <div key={c.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate">{c.id} — {c.fullName}</p>
-                    <p className="text-xs text-muted-foreground truncate">{c.details.slice(0, 60)}...</p>
+                    <p className="text-sm font-medium text-foreground truncate">{c.complaint_code} — {c.complainant_name}</p>
+                    <p className="text-xs text-muted-foreground truncate">{c.complaint_title}</p>
                   </div>
                   <StatusBadge status={c.status} />
                 </div>

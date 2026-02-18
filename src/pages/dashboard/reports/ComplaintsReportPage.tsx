@@ -32,29 +32,44 @@ const ComplaintsReportPage = () => (
         </Card>
       ))}
     </div>
-    <Card className="glass-card">
-      <CardContent className="p-6">
-        <h3 className="font-semibold text-foreground mb-3">Summary</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-          <div className="p-3 rounded-lg bg-muted/50">
-            <p className="text-muted-foreground">Total Complaints</p>
-            <p className="text-xl font-bold text-foreground">{mockComplaints.length}</p>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <Card className="glass-card">
+        <CardContent className="p-6">
+          <h3 className="font-semibold text-foreground mb-3">Summary</h3>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="p-3 rounded-lg bg-muted/50">
+              <p className="text-muted-foreground">Total Complaints</p>
+              <p className="text-xl font-bold text-foreground">{mockComplaints.length}</p>
+            </div>
+            <div className="p-3 rounded-lg bg-muted/50">
+              <p className="text-muted-foreground">Open</p>
+              <p className="text-xl font-bold text-foreground">{mockComplaints.filter(c => c.status !== 'Closed' && c.status !== 'Rejected').length}</p>
+            </div>
+            <div className="p-3 rounded-lg bg-muted/50">
+              <p className="text-muted-foreground">Closed</p>
+              <p className="text-xl font-bold text-foreground">{mockComplaints.filter(c => c.status === 'Closed').length}</p>
+            </div>
+            <div className="p-3 rounded-lg bg-muted/50">
+              <p className="text-muted-foreground">Rejected</p>
+              <p className="text-xl font-bold text-foreground">{mockComplaints.filter(c => c.status === 'Rejected').length}</p>
+            </div>
           </div>
-          <div className="p-3 rounded-lg bg-muted/50">
-            <p className="text-muted-foreground">Open</p>
-            <p className="text-xl font-bold text-foreground">{mockComplaints.filter(c => c.status !== 'Closed' && c.status !== 'Rejected').length}</p>
+        </CardContent>
+      </Card>
+      <Card className="glass-card">
+        <CardContent className="p-6">
+          <h3 className="font-semibold text-foreground mb-3">By Case Type</h3>
+          <div className="space-y-3 text-sm">
+            {(['Individual', 'Business', 'Organization'] as const).map(type => (
+              <div key={type} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                <span className="text-muted-foreground">{type}</span>
+                <span className="text-lg font-bold text-foreground">{mockComplaints.filter(c => c.case_type === type).length}</span>
+              </div>
+            ))}
           </div>
-          <div className="p-3 rounded-lg bg-muted/50">
-            <p className="text-muted-foreground">Closed</p>
-            <p className="text-xl font-bold text-foreground">{mockComplaints.filter(c => c.status === 'Closed').length}</p>
-          </div>
-          <div className="p-3 rounded-lg bg-muted/50">
-            <p className="text-muted-foreground">Rejected</p>
-            <p className="text-xl font-bold text-foreground">{mockComplaints.filter(c => c.status === 'Rejected').length}</p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   </div>
 );
 
