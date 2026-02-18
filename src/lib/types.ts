@@ -11,15 +11,36 @@ export type ComplaintStatus =
   | 'Closed'
   | 'Rejected';
 
+export type CaseType = 'Individual' | 'Business' | 'Organization';
+
 export interface Complaint {
   id: string;
+  complaint_code: string;
+  case_status: string;
+  taxpayer_name: string;
   tin: string;
+  taxpayer_phone: string;
+  complainant_name: string;
+  complainant_phone: string;
+  complainant_email: string;
+  category_id: string;
+  sub_category_id: string;
+  complaints_on: string;
+  status_id: string;
+  status: ComplaintStatus;
+  case_type: CaseType;
+  applied_date: string;
+  complaint_title: string;
+  details: string;
+  machine_code?: string;
+  reference_number?: string;
+  tax_center?: string;
+  assigned_to?: string;
+  // legacy compat
   fullName: string;
   contact: string;
-  details: string;
   category?: string;
   subcategory?: string;
-  status: ComplaintStatus;
   assignedOfficer?: string;
   directorate?: string;
   createdAt: string;
