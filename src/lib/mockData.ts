@@ -194,9 +194,65 @@ export const mockComplaints: Complaint[] = [
 ];
 
 export const mockAssessments: Assessment[] = [
-  { id: 'ASS-001', complaintId: 'CMP-2026-001', assessedBy: '4', type: 'officer', content: 'Reviewed tax filing. Found discrepancy in reported income vs employer records.', createdAt: '2026-01-28T10:00:00Z' },
-  { id: 'ASS-002', complaintId: 'CMP-2026-002', assessedBy: '5', type: 'officer', content: 'All refund documents verified. Amount eligible for refund confirmed.', createdAt: '2026-02-03T11:30:00Z' },
-  { id: 'ASS-003', complaintId: 'CMP-2026-005', assessedBy: '6', type: 'directorate', content: 'Confirmed withholding tax calculation error. Correction issued.', createdAt: '2026-02-08T14:00:00Z' },
+  {
+    id: 'ASS-001',
+    complaint_id: 'CMP-2026-001',
+    assessment_status: 'Sent',
+    assess_no: 'ASN-2026-001',
+    explanation_topic: 'Income Tax Discrepancy',
+    sent_to: 'John Doe Business PLC',
+    sent_date: '2026-01-28',
+    explanation_date: '2026-02-05',
+    sent_by: 'Officer Ahmed',
+    // legacy
+    complaintId: 'CMP-2026-001', assessedBy: '4', type: 'officer',
+    content: 'Reviewed tax filing. Found discrepancy in reported income vs employer records.',
+    createdAt: '2026-01-28T10:00:00Z',
+  },
+  {
+    id: 'ASS-002',
+    complaint_id: 'CMP-2026-002',
+    assessment_status: 'Responded',
+    assess_no: 'ASN-2026-002',
+    explanation_topic: 'VAT Refund Verification',
+    sent_to: 'Jane Smith Trading',
+    sent_date: '2026-02-03',
+    explanation_date: '2026-02-10',
+    sent_by: 'Officer Sara',
+    // legacy
+    complaintId: 'CMP-2026-002', assessedBy: '5', type: 'officer',
+    content: 'All refund documents verified. Amount eligible for refund confirmed.',
+    createdAt: '2026-02-03T11:30:00Z',
+  },
+  {
+    id: 'ASS-003',
+    complaint_id: 'CMP-2026-005',
+    assessment_status: 'Closed',
+    assess_no: 'ASN-2026-003',
+    explanation_topic: 'Withholding Tax Correction',
+    sent_to: 'Domestic Tax Directorate',
+    sent_date: '2026-02-08',
+    explanation_date: '2026-02-12',
+    sent_by: 'Dir. Domestic Tax',
+    // legacy
+    complaintId: 'CMP-2026-005', assessedBy: '6', type: 'directorate',
+    content: 'Confirmed withholding tax calculation error. Correction issued.',
+    createdAt: '2026-02-08T14:00:00Z',
+  },
+  {
+    id: 'ASS-004',
+    complaint_id: 'CMP-2026-004',
+    assessment_status: 'Pending',
+    assess_no: 'ASN-2026-004',
+    explanation_topic: 'Staff Conduct Review',
+    sent_to: 'Taxpayer Services',
+    sent_date: '2026-02-09',
+    sent_by: 'Team Lead A',
+    // legacy
+    complaintId: 'CMP-2026-004', assessedBy: '3', type: 'officer',
+    content: 'Staff behavior complaint under review.',
+    createdAt: '2026-02-09T10:30:00Z',
+  },
 ];
 
 export const mockResponses: Response[] = [

@@ -57,11 +57,20 @@ export interface StaffUser {
 
 export interface Assessment {
   id: string;
-  complaintId: string;
-  assessedBy: string;
-  type: 'officer' | 'directorate';
-  content: string;
-  createdAt: string;
+  complaint_id: string;
+  assessment_status: 'Pending' | 'Sent' | 'Responded' | 'Closed';
+  assess_no: string;
+  explanation_topic: string;
+  sent_to: string;
+  sent_date: string;
+  explanation_date?: string;
+  sent_by: string;
+  // legacy compat
+  complaintId?: string;
+  assessedBy?: string;
+  type?: 'officer' | 'directorate';
+  content?: string;
+  createdAt?: string;
 }
 
 export interface Response {
