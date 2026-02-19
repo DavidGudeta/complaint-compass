@@ -1,35 +1,103 @@
+import { useState } from 'react';
+import { mockComplaints } from '@/lib/mockData';
 import { Card, CardContent } from '@/components/ui/card';
-import { ClipboardList } from 'lucide-react';
+import { ClipboardList, Eye, Pencil, Trash2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { StatusBadge } from '@/components/StatusBadge';
+import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Complaint } from '@/lib/types';
+import ComplaintDetailSheet from '@/components/ComplaintDetailSheet';
 
-const ReopenedComplaintsPage = () => (
-  <div className="space-y-6">
-    <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-      <ClipboardList className="w-6 h-6 text-secondary" /> Re-opened Complaints
-    </h1>
-    <Card className="glass-card">
-      <CardContent className="p-0">
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Complainant</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Original Status</TableHead>
-                <TableHead>Re-opened Date</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell colSpan={5} className="text-center text-muted-foreground py-8">No re-opened complaints</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </div>
-      </CardContent>
-    </Card>
-  </div>
-);
+// Re-opened = complaints that were Closed/Rejected but brought back (simulated as "In Progress" here)
+const reopened = mockComplaints.filter(c => c.status === 'In Progress');
+
+const ReopenedComplaintsPage = () => {
+  const [complaints, setComplaints] = useState(reopened);
+  const [selected, setSelected] = useState<Complaint | null>(null);
+  const [sheetOpen, setSheetOpen] = useState(false);
+
+  const openDetail = (c: Complaint) => { setSelected(c); setSheetOpen(true); };
+  const handleUpdate = (updated: Complaint) => {
+    setComplaints(prev => prev.map(c => c.id === updated.id ? updated : c));
+    setSelected(updated);
+  };
+  const handleDelete = (id: string) => {
+    setComplaints(prev => prev.filter(c => c.id !== id));
+    setSheetOpen(false); setSelected(null);
+  };
+
+  return (
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+        <ClipboardList className="w-6 h-6 text-secondary" /> Re-opened Complaints
+      </h1>
+      <Card className="glass-card">
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Complaint Code</TableHead>
+                  <TableHead>Complaint Title</TableHead>
+                  <TableHead>Taxpayer Name</TableHead>
+                  <TableHead>TIN</TableHead>
+                  <TableHead className="hidden md:table-cell">Complainant</TableHead>
+                  <TableHead className="hidden lg:table-cell">Category</TableHead>
+                  <TableHead className="hidden lg:table-cell">Case Type</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="hidden md:table-cell">Applied Date</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {complaints.length > 0 ? complaints.map(c => (
+                  <TableRow key={c.id} className="hover:bg-muted/50">
+                    <TableCell className="font-medium text-foreground whitespace-nowrap">{c.complaint_code}</TableCell>
+                    <TableCell className="text-foreground max-w-[160px] truncate" title={c.complaint_title}>{c.complaint_title}</TableCell>
+                    <TableCell className="text-foreground">{c.taxpayer_name}</TableCell>
+                    <TableCell className="text-muted-foreground font-mono text-xs">{c.tin}</TableCell>
+                    <TableCell className="hidden md:table-cell text-muted-foreground">{c.complainant_name}</TableCell>
+                    <TableCell className="hidden lg:table-cell text-muted-foreground">{c.category || '—'}</TableCell>
+                    <TableCell className="hidden lg:table-cell">
+                      <Badge variant="outline" className="text-xs">{c.case_type}</Badge>
+                    </TableCell>
+                    <TableCell><StatusBadge status={c.status} /></TableCell>
+                    <TableCell className="hidden md:table-cell text-muted-foreground text-sm">{new Date(c.applied_date).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-primary" title="View Details" onClick={() => openDetail(c)}>
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-muted-foreground" title="Edit" onClick={() => openDetail(c)}>
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-destructive" title="Delete" onClick={() => handleDelete(c.id)}>
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )) : (
+                  <TableRow>
+                    <TableCell colSpan={10} className="text-center text-muted-foreground py-8">No re-opened complaints</TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+
+      <ComplaintDetailSheet
+        complaint={selected}
+        open={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        onUpdate={handleUpdate}
+        onDelete={handleDelete}
+      />
+    </div>
+  );
+};
 
 export default ReopenedComplaintsPage;
