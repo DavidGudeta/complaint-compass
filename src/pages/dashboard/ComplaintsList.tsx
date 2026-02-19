@@ -1,25 +1,48 @@
-import { mockComplaints, mockStaffUsers } from '@/lib/mockData';
+import { useState } from 'react';
+import { mockComplaints as initialComplaints, mockStaffUsers } from '@/lib/mockData';
 import { StatusBadge } from '@/components/StatusBadge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { ClipboardList, Search } from 'lucide-react';
-import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { ClipboardList, Search, Eye } from 'lucide-react';
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow
 } from '@/components/ui/table';
+import { Complaint } from '@/lib/types';
+import ComplaintDetailSheet from '@/components/ComplaintDetailSheet';
 
 const staffMap = Object.fromEntries(mockStaffUsers.map(u => [u.id, u.name]));
 
 const ComplaintsList = () => {
+  const [complaints, setComplaints] = useState(initialComplaints);
   const [search, setSearch] = useState('');
-  const filtered = mockComplaints.filter(c =>
+  const [selected, setSelected] = useState<Complaint | null>(null);
+  const [sheetOpen, setSheetOpen] = useState(false);
+
+  const filtered = complaints.filter(c =>
     c.complaint_code.toLowerCase().includes(search.toLowerCase()) ||
     c.complainant_name.toLowerCase().includes(search.toLowerCase()) ||
     c.taxpayer_name.toLowerCase().includes(search.toLowerCase()) ||
     c.tin.includes(search) ||
     c.complaint_title.toLowerCase().includes(search.toLowerCase())
   );
+
+  const openDetail = (c: Complaint) => {
+    setSelected(c);
+    setSheetOpen(true);
+  };
+
+  const handleUpdate = (updated: Complaint) => {
+    setComplaints(prev => prev.map(c => c.id === updated.id ? updated : c));
+    setSelected(updated);
+  };
+
+  const handleDelete = (id: string) => {
+    setComplaints(prev => prev.filter(c => c.id !== id));
+    setSheetOpen(false);
+    setSelected(null);
+  };
 
   return (
     <div className="space-y-6">
@@ -60,11 +83,12 @@ const ComplaintsList = () => {
                   <TableHead className="hidden xl:table-cell">Assigned To</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="hidden md:table-cell">Applied Date</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filtered.length > 0 ? filtered.map(c => (
-                  <TableRow key={c.id} className="cursor-pointer hover:bg-muted/50">
+                  <TableRow key={c.id} className="hover:bg-muted/50">
                     <TableCell className="font-medium text-foreground whitespace-nowrap">{c.complaint_code}</TableCell>
                     <TableCell className="text-foreground max-w-[180px] truncate" title={c.complaint_title}>{c.complaint_title}</TableCell>
                     <TableCell className="text-foreground whitespace-nowrap">{c.taxpayer_name}</TableCell>
@@ -85,10 +109,15 @@ const ComplaintsList = () => {
                     <TableCell className="hidden md:table-cell text-muted-foreground text-sm whitespace-nowrap">
                       {new Date(c.applied_date).toLocaleDateString()}
                     </TableCell>
+                    <TableCell>
+                      <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => openDetail(c)}>
+                        <Eye className="w-4 h-4" />
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 )) : (
                   <TableRow>
-                    <TableCell colSpan={16} className="text-center text-muted-foreground py-8">No complaints found</TableCell>
+                    <TableCell colSpan={17} className="text-center text-muted-foreground py-8">No complaints found</TableCell>
                   </TableRow>
                 )}
               </TableBody>
@@ -96,6 +125,14 @@ const ComplaintsList = () => {
           </div>
         </CardContent>
       </Card>
+
+      <ComplaintDetailSheet
+        complaint={selected}
+        open={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        onUpdate={handleUpdate}
+        onDelete={handleDelete}
+      />
     </div>
   );
 };
