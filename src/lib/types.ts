@@ -80,4 +80,13 @@ export interface Response {
   content: string;
   sentToUser: boolean;
   createdAt: string;
+  // extended fields
+  response_status: 'Draft' | 'Pending Approval' | 'Approved' | 'Sent';
+  subject?: string;
+  recipient_name?: string;
+  recipient_email?: string;
+  sent_date?: string;
+  approved_by?: string;
+  approved_date?: string;
+  notes?: string;
 }
