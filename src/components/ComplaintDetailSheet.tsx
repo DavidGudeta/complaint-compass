@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,6 +18,7 @@ interface ComplaintDetailSheetProps {
   onClose: () => void;
   onUpdate: (updated: Complaint) => void;
   onDelete: (id: string) => void;
+  initialMode?: 'detail' | 'edit';
 }
 
 const staffMap = Object.fromEntries(mockStaffUsers.map(u => [u.id, u.name]));
@@ -34,10 +35,31 @@ const InfoRow = ({ icon: Icon, label, value }: { icon: React.ElementType; label:
   </div>
 );
 
-const ComplaintDetailSheet = ({ complaint, open, onClose, onUpdate, onDelete }: ComplaintDetailSheetProps) => {
+const ComplaintDetailSheet = ({ complaint, open, onClose, onUpdate, onDelete, initialMode = 'detail' }: ComplaintDetailSheetProps) => {
   const [editing, setEditing] = useState(false);
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [form, setForm] = useState<Complaint | null>(null);
+
+  // Reset state each time the sheet opens with a potentially different mode/complaint
+  useEffect(() => {
+    if (open) {
+      const isEdit = initialMode === 'edit';
+      setEditing(isEdit);
+      setForm(isEdit && complaint ? { ...complaint } : null);
+    } else {
+      setEditing(false);
+      setForm(null);
+    }
+  }, [open, initialMode, complaint?.id]);
+
+  // Reset editing state when sheet opens/closes or initialMode changes
+  const handleOpenChange = (v: boolean) => {
+    if (!v) {
+      setEditing(false);
+      setForm(null);
+      onClose();
+    }
+  };
 
   const startEdit = () => {
     setForm(complaint ? { ...complaint } : null);
@@ -108,7 +130,7 @@ const ComplaintDetailSheet = ({ complaint, open, onClose, onUpdate, onDelete }: 
 
   return (
     <>
-      <Sheet open={open} onOpenChange={v => { if (!v) onClose(); }}>
+      <Sheet open={open} onOpenChange={handleOpenChange}>
         <SheetContent side="right" className="w-full sm:max-w-2xl overflow-y-auto p-0">
           {/* Header */}
           <div className="gradient-primary p-6 text-primary-foreground">
