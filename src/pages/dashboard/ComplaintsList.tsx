@@ -5,7 +5,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ClipboardList, Search, Eye } from 'lucide-react';
+import { ClipboardList, Search, Eye, Pencil, Trash2 } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow
 } from '@/components/ui/table';
@@ -19,6 +20,8 @@ const ComplaintsList = () => {
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<Complaint | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [sheetMode, setSheetMode] = useState<'detail' | 'edit'>('detail');
+  const [deleteTarget, setDeleteTarget] = useState<Complaint | null>(null);
 
   const filtered = complaints.filter(c =>
     c.complaint_code.toLowerCase().includes(search.toLowerCase()) ||
@@ -28,10 +31,8 @@ const ComplaintsList = () => {
     c.complaint_title.toLowerCase().includes(search.toLowerCase())
   );
 
-  const openDetail = (c: Complaint) => {
-    setSelected(c);
-    setSheetOpen(true);
-  };
+  const openDetail = (c: Complaint) => { setSelected(c); setSheetMode('detail'); setSheetOpen(true); };
+  const openEdit = (c: Complaint) => { setSelected(c); setSheetMode('edit'); setSheetOpen(true); };
 
   const handleUpdate = (updated: Complaint) => {
     setComplaints(prev => prev.map(c => c.id === updated.id ? updated : c));
@@ -109,11 +110,19 @@ const ComplaintsList = () => {
                     <TableCell className="hidden md:table-cell text-muted-foreground text-sm whitespace-nowrap">
                       {new Date(c.applied_date).toLocaleDateString()}
                     </TableCell>
-                    <TableCell>
-                      <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => openDetail(c)}>
-                        <Eye className="w-4 h-4" />
-                      </Button>
-                    </TableCell>
+                     <TableCell>
+                       <div className="flex items-center gap-1">
+                         <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-primary" title="View Details" onClick={() => openDetail(c)}>
+                           <Eye className="w-4 h-4" />
+                         </Button>
+                         <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-muted-foreground" title="Edit" onClick={() => openEdit(c)}>
+                           <Pencil className="w-4 h-4" />
+                         </Button>
+                         <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-destructive" title="Delete" onClick={() => setDeleteTarget(c)}>
+                           <Trash2 className="w-4 h-4" />
+                         </Button>
+                       </div>
+                     </TableCell>
                   </TableRow>
                 )) : (
                   <TableRow>
@@ -132,7 +141,28 @@ const ComplaintsList = () => {
         onClose={() => setSheetOpen(false)}
         onUpdate={handleUpdate}
         onDelete={handleDelete}
+        initialMode={sheetMode}
       />
+
+      <AlertDialog open={!!deleteTarget} onOpenChange={v => { if (!v) setDeleteTarget(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Complaint</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete <strong>{deleteTarget?.complaint_code}</strong>? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => { if (deleteTarget) handleDelete(deleteTarget.id); setDeleteTarget(null); }}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

@@ -19,9 +19,11 @@ const AssignComplaintsPage = () => {
   );
   const [selected, setSelected] = useState<Complaint | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [sheetMode, setSheetMode] = useState<'detail' | 'edit'>('detail');
   const [deleteTarget, setDeleteTarget] = useState<Complaint | null>(null);
 
-  const openDetail = (c: Complaint) => { setSelected(c); setSheetOpen(true); };
+  const openDetail = (c: Complaint) => { setSelected(c); setSheetMode('detail'); setSheetOpen(true); };
+  const openEdit = (c: Complaint) => { setSelected(c); setSheetMode('edit'); setSheetOpen(true); };
   const handleUpdate = (updated: Complaint) => {
     setComplaints(prev => prev.map(c => c.id === updated.id ? updated : c));
     setSelected(updated);
@@ -88,7 +90,7 @@ const AssignComplaintsPage = () => {
                         <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-primary" title="View Details" onClick={() => openDetail(c)}>
                           <Eye className="w-4 h-4" />
                         </Button>
-                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-muted-foreground" title="Edit" onClick={() => { setSelected(c); setSheetOpen(true); }}>
+                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-muted-foreground" title="Edit" onClick={() => openEdit(c)}>
                           <Pencil className="w-4 h-4" />
                         </Button>
                         <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-destructive" title="Delete" onClick={() => setDeleteTarget(c)}>
@@ -115,6 +117,7 @@ const AssignComplaintsPage = () => {
         onClose={() => setSheetOpen(false)}
         onUpdate={handleUpdate}
         onDelete={handleDelete}
+        initialMode={sheetMode}
       />
 
       <AlertDialog open={!!deleteTarget} onOpenChange={v => { if (!v) setDeleteTarget(null); }}>
